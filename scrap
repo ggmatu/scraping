@@ -1,0 +1,34 @@
+from bs4 import BeautifulSoup
+import requests
+import pandas as pd
+
+url2 = 'https://www.fravega.com/l/celulares/celulares-liberados/'
+url = 'https://www.garbarino.com/productos/celulares-libres/4359'
+page = requests.get(url)
+soup = BeautifulSoup(page.content, 'html.parser')
+page2= requests.get(url2)
+
+#Equipos 
+eq2= soup.find_all('h2', class_='styled__Ellipsis-sc-3dysb6-0 gcrKif')
+eq = soup.find_all('h3', class_='itemBox--title')
+equiposCelulares2 = []
+equiposCelulares = []
+precioCelulares = soup.find_all('span', class_='value-item')
+precioCelulares2 = soup.find_all('p', class_= 'price')
+precios = []
+precios2 = []
+
+for i in eq2:
+	equiposCelulares2.append(i.text)
+count = 0 
+for i in eq:
+	equiposCelulares.append(i.text)
+	
+for i in precioCelulares:
+		precios.append(i.text)
+for i in precioCelulares2:
+		precios2.append(i.text)
+union = pd.DataFrame({'Garbarino': 'Garbarino' ,'Modelo' : equiposCelulares, 'Precio' : precios})
+union2 = pd.DataFrame({'Fravega': 'Fravega' ,'Modelo' : equiposCelulares2, 'Precio' : precios2})
+
+print (union)
